@@ -171,10 +171,11 @@ export function MyInformationDashboard({ currentUser = null, sidebarOpen = true,
           }`}
         >
         {/* Close Button for Mobile */}
-        <div className="lg:hidden absolute top-4 right-4">
+        <div className="lg:hidden absolute top-4 right-4 z-50">
           <button
             onClick={() => setInternalSidebarOpen(false)}
-            className="text-white hover:bg-amber-600 p-2 rounded-lg transition"
+            className="text-white hover:bg-amber-600 p-2 rounded-lg transition w-10 h-10 flex items-center justify-center"
+            title="Close sidebar"
           >
             <X className="w-6 h-6" />
           </button>

@@ -25,6 +25,14 @@ export function MyPurchases({ onNavigate }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isAutoPlay, setIsAutoPlay] = useState(true);
   const [showCollections, setShowCollections] = useState(false);
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+  // Track screen width for responsive carousel
+  useEffect(() => {
+    const handleResize = () => setScreenWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Purchase data with imported images
   const purchases = [
@@ -150,6 +158,43 @@ export function MyPurchases({ onNavigate }) {
     setIsAutoPlay(false);
   };
 
+  // Get responsive position values based on screen width
+  const getResponsivePosition = () => {
+    if (screenWidth < 640) {
+      // Mobile: Single centered card
+      return {
+        centerWidth: 'clamp(240px, 80vw, 300px)',
+        centerHeight: '100%',
+        sideWidth: '0px',
+        sideHeight: '0px',
+        leftPos: '-200%',
+        rightPos: '-200%',
+      };
+    } else if (screenWidth < 1024) {
+      // Tablet: Two cards visible
+      return {
+        centerWidth: 'clamp(280px, 65vw, 420px)',
+        centerHeight: '100%',
+        sideWidth: 'clamp(180px, 40vw, 260px)',
+        sideHeight: '75%',
+        leftPos: '-60%',
+        rightPos: '-60%',
+      };
+    } else {
+      // Desktop: Three cards visible - Properly formatted
+      return {
+        centerWidth: 'clamp(320px, 65vw, 520px)',
+        centerHeight: '100%',
+        sideWidth: 'clamp(240px, 45vw, 380px)',
+        sideHeight: '80%',
+        leftPos: '-12%',
+        rightPos: '-12%',
+      };
+    }
+  };
+
+  const posValues = getResponsivePosition();
+
   const getVisibleItems = () => {
     const items = [];
     const totalItems = purchases.length;
@@ -242,17 +287,17 @@ export function MyPurchases({ onNavigate }) {
         >
           <div className="relative w-full max-w-7xl mx-auto h-full flex items-center justify-center">
             {/* Carousel Container */}
-            <div className="relative w-full h-96 sm:h-96 md:h-[500px] lg:h-[600px] flex items-center justify-center perspective">
+            <div className="relative w-full h-80 sm:h-96 md:h-[500px] lg:h-[650px] flex items-center justify-center perspective">
               
               {/* BOX 1 - Rotates: Left → Center → Right → Left */}
               <div 
                 className="absolute flex-shrink-0 rounded-2xl md:rounded-3xl overflow-hidden bg-gradient-to-br from-amber-900 to-slate-900 transform z-10 transition-all duration-700 ease-in-out"
                 style={{
-                  width: activeIndex % 3 === 0 ? 'clamp(200px, 50vw, 300px)' : activeIndex % 3 === 1 ? 'clamp(280px, 70vw, 520px)' : 'clamp(220px, 60vw, 380px)',
-                  height: activeIndex % 3 === 0 ? '72%' : activeIndex % 3 === 1 ? '100%' : '85%',
+                  width: activeIndex % 3 === 0 ? posValues.sideWidth : activeIndex % 3 === 1 ? posValues.centerWidth : posValues.sideWidth,
+                  height: activeIndex % 3 === 0 ? posValues.sideHeight : activeIndex % 3 === 1 ? posValues.centerHeight : posValues.sideHeight,
                   opacity: activeIndex % 3 === 0 ? 0.5 : activeIndex % 3 === 1 ? 1 : 0.6,
-                  left: activeIndex % 3 === 0 ? '-15%' : activeIndex % 3 === 1 ? '50%' : 'auto',
-                  right: activeIndex % 3 === 2 ? '-15%' : 'auto',
+                  left: activeIndex % 3 === 0 ? posValues.leftPos : activeIndex % 3 === 1 ? '50%' : 'auto',
+                  right: activeIndex % 3 === 2 ? posValues.rightPos : 'auto',
                   transform: activeIndex % 3 === 1 ? 'translateX(-50%) scale(1.05)' : 'none',
                   borderWidth: activeIndex % 3 === 0 ? '12px' : activeIndex % 3 === 1 ? '16px' : '14px',
                   borderColor: activeIndex % 3 === 0 ? '#b45309' : activeIndex % 3 === 1 ? '#eab308' : '#fcd34d',
@@ -271,11 +316,11 @@ export function MyPurchases({ onNavigate }) {
               <div 
                 className="absolute flex-shrink-0 rounded-2xl md:rounded-3xl overflow-hidden bg-gradient-to-br from-amber-900 to-slate-900 transform z-10 transition-all duration-700 ease-in-out"
                 style={{
-                  width: activeIndex % 3 === 0 ? 'clamp(220px, 60vw, 380px)' : activeIndex % 3 === 1 ? 'clamp(200px, 50vw, 300px)' : 'clamp(280px, 70vw, 520px)',
-                  height: activeIndex % 3 === 0 ? '85%' : activeIndex % 3 === 1 ? '72%' : '100%',
+                  width: activeIndex % 3 === 0 ? posValues.sideWidth : activeIndex % 3 === 1 ? posValues.sideWidth : posValues.centerWidth,
+                  height: activeIndex % 3 === 0 ? posValues.sideHeight : activeIndex % 3 === 1 ? posValues.sideHeight : posValues.centerHeight,
                   opacity: activeIndex % 3 === 0 ? 0.6 : activeIndex % 3 === 1 ? 0.5 : 1,
-                  left: activeIndex % 3 === 0 ? 'auto' : activeIndex % 3 === 1 ? '-15%' : '50%',
-                  right: activeIndex % 3 === 0 ? '-15%' : 'auto',
+                  left: activeIndex % 3 === 0 ? 'auto' : activeIndex % 3 === 1 ? posValues.leftPos : '50%',
+                  right: activeIndex % 3 === 0 ? posValues.rightPos : 'auto',
                   transform: activeIndex % 3 === 2 ? 'translateX(-50%) scale(1.05)' : 'none',
                   borderWidth: activeIndex % 3 === 0 ? '14px' : activeIndex % 3 === 1 ? '12px' : '16px',
                   borderColor: activeIndex % 3 === 0 ? '#fcd34d' : activeIndex % 3 === 1 ? '#b45309' : '#eab308',
@@ -294,11 +339,11 @@ export function MyPurchases({ onNavigate }) {
               <div 
                 className="absolute flex-shrink-0 rounded-2xl md:rounded-3xl overflow-hidden bg-gradient-to-br from-amber-900 to-slate-900 transform z-10 transition-all duration-700 ease-in-out"
                 style={{
-                  width: activeIndex % 3 === 0 ? 'clamp(280px, 70vw, 520px)' : activeIndex % 3 === 1 ? 'clamp(220px, 60vw, 380px)' : 'clamp(200px, 50vw, 300px)',
-                  height: activeIndex % 3 === 0 ? '100%' : activeIndex % 3 === 1 ? '85%' : '72%',
+                  width: activeIndex % 3 === 0 ? posValues.centerWidth : activeIndex % 3 === 1 ? posValues.sideWidth : posValues.sideWidth,
+                  height: activeIndex % 3 === 0 ? posValues.centerHeight : activeIndex % 3 === 1 ? posValues.sideHeight : posValues.sideHeight,
                   opacity: activeIndex % 3 === 0 ? 1 : activeIndex % 3 === 1 ? 0.6 : 0.5,
-                  left: activeIndex % 3 === 0 ? '50%' : activeIndex % 3 === 1 ? 'auto' : '-15%',
-                  right: activeIndex % 3 === 1 ? 'auto' : '-15%',
+                  left: activeIndex % 3 === 0 ? '50%' : activeIndex % 3 === 1 ? 'auto' : posValues.leftPos,
+                  right: activeIndex % 3 === 1 ? 'auto' : posValues.rightPos,
                   transform: activeIndex % 3 === 0 ? 'translateX(-50%) scale(1.05)' : 'none',
                   borderWidth: activeIndex % 3 === 0 ? '16px' : activeIndex % 3 === 1 ? '14px' : '12px',
                   borderColor: activeIndex % 3 === 0 ? '#eab308' : activeIndex % 3 === 1 ? '#fcd34d' : '#b45309',
