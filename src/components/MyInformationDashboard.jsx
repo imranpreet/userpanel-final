@@ -1277,13 +1277,22 @@ export function MyInformationDashboard({ currentUser = null, sidebarOpen = true,
 
                               {/* Order Details */}
                               <div className="lg:col-span-3 flex flex-col justify-between">
-                                {/* Header Info */}
+                                {/* Header Info - All in One Row */}
                                 <div>
-                                  <div className="flex flex-wrap items-center justify-between mb-4 gap-2">
+                                  <div className="flex flex-wrap items-center justify-between mb-4 gap-4">
+                                    {/* Order ID - Left */}
                                     <div>
                                       <p className="text-xs text-gray-500 font-semibold">ORDER ID</p>
                                       <p className="text-lg font-bold text-gray-900">{order.id}</p>
                                     </div>
+                                    
+                                    {/* Art Title and Artist - Center */}
+                                    <div className="flex-1 text-center">
+                                      <h3 className="text-2xl font-bold text-gray-900 mb-1">{order.title}</h3>
+                                      <p className="text-gray-600 text-sm">by <span className="font-semibold text-gray-900">{order.artist}</span></p>
+                                    </div>
+                                    
+                                    {/* Order Date - Right */}
                                     <div className="text-right">
                                       <p className="text-xs text-gray-500 font-semibold">ORDER DATE</p>
                                       <p className="text-sm font-semibold text-gray-900">{new Date(order.date).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
@@ -1292,8 +1301,6 @@ export function MyInformationDashboard({ currentUser = null, sidebarOpen = true,
 
                                   {/* Art Details */}
                                   <div className="mb-6 pb-6 border-b-2 border-gray-200">
-                                    <h3 className="text-2xl font-bold text-gray-900 mb-2">{order.title}</h3>
-                                    <p className="text-gray-600 text-sm mb-4">by <span className="font-semibold text-gray-900">{order.artist}</span></p>
                                     
                                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                                       <div className="bg-gray-50 p-3 rounded-lg">
@@ -1315,42 +1322,18 @@ export function MyInformationDashboard({ currentUser = null, sidebarOpen = true,
                                     </div>
                                   </div>
 
-                                  {/* Order Status Info */}
-                                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm mb-6">
-                                    <div>
-                                      <p className="text-xs text-gray-500 font-semibold mb-2">PAYMENT STATUS</p>
-                                      <p className={`inline-block px-3 py-1 rounded-full font-semibold text-xs ${order.paymentStatus === 'Paid' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
-                                        {order.paymentStatus}
-                                      </p>
-                                    </div>
-                                    <div>
-                                      <p className="text-xs text-gray-500 font-semibold mb-2">ORDER STATUS</p>
-                                      <p className={`inline-block px-3 py-1 rounded-full font-semibold text-xs ${
-                                        order.status === 'Delivered' ? 'bg-green-100 text-green-700' :
-                                        order.status === 'In Transit' ? 'bg-blue-100 text-blue-700' :
-                                        'bg-gray-100 text-gray-700'
-                                      }`}>
-                                        {order.status}
-                                      </p>
-                                    </div>
-                                    <div>
-                                      <p className="text-xs text-gray-500 font-semibold mb-2">EXPECTED DELIVERY</p>
-                                      <p className="font-semibold text-gray-900">{new Date(order.deliveryDate).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' })}</p>
-                                    </div>
+                                  {/* Action Buttons */}
+                                  <div className="flex flex-wrap gap-3 justify-center">
+                                    <button className="px-6 py-2 bg-amber-600 text-white font-semibold rounded-lg hover:bg-amber-700 transition text-sm">
+                                      Track Order
+                                    </button>
+                                    <button className="px-6 py-2 bg-gray-200 text-gray-800 font-semibold rounded-lg hover:bg-gray-300 transition text-sm">
+                                      View Invoice
+                                    </button>
+                                    <button className="px-6 py-2 border-2 border-gray-300 text-gray-800 font-semibold rounded-lg hover:border-amber-500 transition text-sm">
+                                      Contact Support
+                                    </button>
                                   </div>
-                                </div>
-
-                                {/* Action Buttons */}
-                                <div className="flex flex-wrap gap-3">
-                                  <button className="px-6 py-2 bg-amber-600 text-white font-semibold rounded-lg hover:bg-amber-700 transition text-sm">
-                                    Track Order
-                                  </button>
-                                  <button className="px-6 py-2 bg-gray-200 text-gray-800 font-semibold rounded-lg hover:bg-gray-300 transition text-sm">
-                                    View Invoice
-                                  </button>
-                                  <button className="px-6 py-2 border-2 border-gray-300 text-gray-800 font-semibold rounded-lg hover:border-amber-500 transition text-sm">
-                                    Contact Support
-                                  </button>
                                 </div>
                               </div>
                             </div>
